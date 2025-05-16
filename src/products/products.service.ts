@@ -34,6 +34,9 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
       data: await this.product.findMany({
         skip: (page - 1) * limit,
         take: limit,
+        where: {
+          available: true,
+        },
       }),
       meta: {
         page,
@@ -47,6 +50,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     const product = await this.product.findUnique({
       where: {
         id,
+        available: true,
       },
     });
     if (!product) {
@@ -76,10 +80,18 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     if (!productFound) {
       throw new NotFoundException(`Product with id: ${id} not found`);
     }
-    return await this.product.delete({
-      where: {
-        id,
+    // return await this.product.delete({
+    //   where: {
+    //     id,
+    //   },
+    // });
+    const product = await this.product.update({
+      where: { id },
+      data: {
+        available: false,
       },
     });
+
+    return product;
   }
 }
