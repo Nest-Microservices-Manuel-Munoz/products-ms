@@ -1,4 +1,4 @@
-# Product Microservice
+# Product Microservice - with NATS
 
 
 
